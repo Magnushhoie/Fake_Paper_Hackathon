@@ -1,3 +1,43 @@
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+import seaborn as sns
+
+def embeddings_loader(feature_name, basepath = "models/embeddings_", precomputed_only = True):
+    # Get/load embeddings
+    data_precomputed_bc = np.load(basepath + feature_name + ".npy")
+
+    #Combine
+    if precomputed_only:
+        
+        embeddings = data_precomputed_bc
+    else:
+        df_fake = pd.read_csv("data/df_fake.csv")
+        data_new = df_fake[feature_name]
+        data_new_bc = get_embeddings(data_new)
+        embeddings = np.vstack([data_new_bc, data_precomputed_bc])
+    embeddings.shape
+    
+    return(embeddings)
+
+def generate_embeddings(feature_names = ['title', 'abstract'], basepath = "models/embeddings_"):
+    embedding_list = []
+    
+    for feature_name in feature_names:
+        embeddings = embeddings_loader(feature_name, basepath)
+        embedding_list.append(embeddings)
+        print(feature_name, embeddings.shape)
+        
+    embeddings_final = np.mean(embedding_list, axis = 0)
+    return(embeddings_final)
+
+import hdbscan
+def cluster_hdbscan(X):
+    clusterer = hdbscan.HDBSCAN()
+    clusterer.fit(X)
+    return(clusterer.labels_)
+
 def PCA_transform(embeddings, n_components = 2):
     X = embeddings
     pca = PCA(n_components = n_components)
