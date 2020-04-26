@@ -19,8 +19,8 @@ y_true[(len(df_fake)): ] = 1
 
 # Create embeddings
 group_list = []
-embeddings = generate_pca_reduced_embeddings(feature_names= ['abstract', 'title'], basepath = "embeddings_")
-X = PCA_transform(embeddings, n_components=2)
+embeddings = generate_pca_reduced_embeddings(feature_names= ['abstract', 'title'], basepath = "models/embeddings_")
+X = PCA_transform_loaded(filename = "models/PCA_4k.pickle", embeddings)
 X_embedded = X
 df = pd.DataFrame(X_embedded)
 

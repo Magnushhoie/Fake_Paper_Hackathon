@@ -1,4 +1,3 @@
-from sklearn.decomposition import PCA
 def PCA_transform(embeddings, n_components = 2):
     X = embeddings
     pca = PCA(n_components = n_components)
@@ -6,9 +5,10 @@ def PCA_transform(embeddings, n_components = 2):
     X_PCA = pca.transform(X)
     return(X_PCA)
 
-
+import pickle
 from sklearn.decomposition import PCA
-def PCA_transform_loaded(pca, X):
+def PCA_transform_loaded(filename, X):
+    pca = pickle.load( open( "models/PCA_4k.pickle", "rb" ) )
     X_PCA = pca.transform(X)
     return(X_PCA)
 
